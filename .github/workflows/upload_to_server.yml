@@ -8,16 +8,3 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
-
-    - name: Set Up SSH
-      uses: webfactory/ssh-agent@v0.5.4
-      with:
-        ssh-private-key: ${{ secrets.GLPR }}
-
-    - name: Deploy to Ubuntu Server
-      run: |
-        ssh -o StrictHostKeyChecking=no glpi@192.168.151.22 "mkdir -p /home/glpi/glpi_react"
-        rsync -avz --exclude='.git/' ./ glpi@192.168.151.22:/home/glpi/glpi_react
