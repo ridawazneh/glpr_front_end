@@ -1,0 +1,5 @@
+1-must make docker non sudo
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+2-must make commit and changes , run it , make tag and push the tag as different branch
