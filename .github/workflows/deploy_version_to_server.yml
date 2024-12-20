@@ -1,0 +1,43 @@
+name: Deploy on Tag with Image Retention
+
+on:
+  push:
+    tags:
+      - 'v*' # Matches tags like v1.0.0, v2.0.1, etc.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.GLPR }}
+
+      - name: Deploy to remote server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
+          # Define variables
+          IMAGE_NAME="my-app-image"
+          NEW_TAG="${GITHUB_REF_NAME}"
+
+          # Stop and remove the old container
+          docker ps -a -q --filter "name=my-app-container" | xargs -r docker rm -f
+
+          # Remove older images beyond the retention limit (keep 2 older + current)
+          docker images $IMAGE_NAME --format "{{.Repository}}:{{.Tag}} {{.CreatedAt}}" | \
+          sort -rk 2 | \
+          awk 'NR>3 {print $1}' | xargs -r docker rmi -f
+
+          # Build the new image
+          docker build -t $IMAGE_NAME:$NEW_TAG /path/to/your/code
+
+          # Start the new container
+          docker run -d --name my-app-container -p 80:80 $IMAGE_NAME:$NEW_TAG
+          EOF
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
