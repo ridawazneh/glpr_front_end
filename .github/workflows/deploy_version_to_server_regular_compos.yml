@@ -15,8 +15,8 @@ jobs:
 
       - name: Deploy application
         run: |
-          IMAGE_NAME=glpi-react-img
-          CONTAINER_NAME=glpi-react-container
+          IMAGE_NAME=react_glpi
+          CONTAINER_NAME=glpi_container
           
           # Stop and remove the old container
           docker ps -a -q --filter "name=$CONTAINER_NAME" | xargs -r docker rm -f
@@ -27,7 +27,7 @@ jobs:
           awk 'NR>3 {print $1}' | xargs -r docker rmi -f
 
           export TAG=${GITHUB_REF_NAME}
-          docker compose build --build-arg TAG=$TAG
-          docker compose up -d --force-recreate
+          TAG=${GITHUB_REF_NAME} docker compose build
+          TAG=${GITHUB_REF_NAME} docker compose up -d --force-recreate
         env:
           GITHUB_REF_NAME: ${{ github.ref_name }}

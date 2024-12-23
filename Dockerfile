@@ -12,7 +12,12 @@ RUN npm install
 
 # Make port 80 available to the world outside this container
 EXPOSE 82
-
+# Define build argument
+# in case u are using docker-compose, u add these 2 , else not needed
+# -----------------------------------------------
+ARG IMAGE_TAG
+ENV IMAGE_TAG=${IMAGE_TAG}
+# -----------------------------------------------
 # Define environment variable
 ENV NAME World
 

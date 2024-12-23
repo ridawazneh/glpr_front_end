@@ -5,8 +5,8 @@ services:
     build:
       context: .
       args:
-        TAG: ${TAG} # Pass the tag from GitHub Actions
-    image: glpi-react-img:${TAG}
+        IMAGE_TAG: ${TAG} # Dynamically passed from GitHub Actions
+    image: react_glpi:${TAG} # Set the dynamic tag for the image
     ports:
       - "3000:3000"
     restart: unless-stopped
