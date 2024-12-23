@@ -1,4 +1,4 @@
-name: Deploy on Tag with Image Retention (Self-Hosted Runner)
+name: Deploy Docker on git release Tag with Image Retention (Self-Hosted Runner)
 
 on:
   push:
