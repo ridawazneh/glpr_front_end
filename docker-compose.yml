@@ -1,0 +1,12 @@
+version: '3'
+services:
+  react-ui:
+    container_name: react-ui
+    build:
+      context: .
+      args:
+        TAG: ${TAG} # Pass the tag from GitHub Actions
+    image: glpi-react-img:${TAG}
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
