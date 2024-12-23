@@ -4,5 +4,7 @@ sudo usermod -aG docker $USER
 newgrp docker
 sudo systemctl restart docker
 restart ubuntu remote machine
+
+this is needed to not encounter sock error 
 sudo chmod 666 /var/run/docker.sock
 2-must make commit and changes , run it , make tag and push the tag as different branch
